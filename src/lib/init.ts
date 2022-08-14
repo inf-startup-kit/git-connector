@@ -6,8 +6,12 @@ import Ajv from "ajv";
 import jtomler from "jtomler";
 import json_from_schema from "json-from-default-schema";
 import * as config_schema from "./schemes/config.json";
+import * as connector_schema from "./schemes/connector.json";
+import * as connector_git_source_schema from "./schemes/connector-git-source.json";
+import * as connector_git_crypt_source_schema from "./schemes/connector-git-crypt-source.json";
 import { IAppConfig } from "./config.interfaces";
 import { AjvErrorHelper } from "./tools/ajv_error_helper";
+import { IConnectorConfig, IConnectorGitSourceConfig, IConnectorGitCryptSourceConfig } from "./connector/interfaces";
 
 type TPackage = {
     version: string
@@ -62,13 +66,13 @@ program.parse(process.argv);
 
 const options = program.opts<TOptions>();
 
-if (process.env["TEMPLATE_CONFIG_PATH"] === undefined) {
+if (process.env["GIT_CONNECTOR_CONFIG_PATH"] === undefined) {
 	if (options.config === undefined) {
 		console.error(`${chalk.bgRed(" FATAL ")} Not set --config key`);
 		process.exit(1);
 	}
 } else {
-	options.config = process.env["TEMPLATE_CONFIG_PATH"];
+	options.config = process.env["GIT_CONNECTOR_CONFIG_PATH"];
 }
 
 const full_config_path = path.resolve(process.cwd(), options.config);
@@ -90,6 +94,41 @@ if (validate(config) === false) {
     const error_text = AjvErrorHelper(validate);
     console.error(`${chalk.bgRed(" FATAL ")} Config schema errors:\n${error_text}`);
     process.exit(1);
+}
+
+let i = 0;
+
+for (let connector of config.connector) {
+
+    const validate_connector = ajv.compile(connector_schema);
+    connector = <IConnectorConfig>json_from_schema(connector, connector_schema);
+
+    if (validate_connector(connector) === false) {
+        const error_text = AjvErrorHelper(validate_connector);
+        console.error(`${chalk.bgRed(" FATAL ")} Config schema connector[${i}] errors:\n${error_text}`);
+        process.exit(1);
+    }
+
+    let validate_source;
+
+    if (connector.source.type === "git") {
+        validate_source = ajv.compile(connector_git_source_schema);
+        connector.source = <IConnectorGitSourceConfig>json_from_schema(connector.source, connector_git_source_schema);
+    }
+
+    if (connector.source.type === "git-crypt") {
+        validate_source = ajv.compile(connector_git_crypt_source_schema);
+        connector.source = <IConnectorGitCryptSourceConfig>json_from_schema(connector.source, connector_git_crypt_source_schema);
+    }
+
+    if (validate_source === undefined) {
+        console.error(`${chalk.bgRed(" FATAL ")} Config config.namespaces[${i}].source type ${chalk.red(connector.source.type)} not support`);
+        process.exit(1);
+    }
+
+    config.connector[i] = connector;
+    
+    ++i;
 }
 
 config.api.prefix = `/${config.api.prefix.replace(/(^\/|\/$)/g,"")}`;

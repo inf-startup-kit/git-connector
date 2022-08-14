@@ -1,0 +1,113 @@
+{
+    "type": "object",
+    "properties": {
+        "type": {
+            "type": "string",
+            "const": "git-crypt"
+        },
+        "include_regexp": {
+            "type": "array",
+            "default": [".*"],
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1
+        },
+        "exclude_regexp": {
+            "type": "array",
+            "default": ["\\.md$"],
+            "items": {
+                "type": "string"
+            },
+            "minItems": 0
+        },
+        "tmp": {
+            "type": "string",
+            "default": "tmp",
+            "minLength": 1,
+            "maxLength": 256
+        },
+        "size": {
+            "type": "string",
+            "default": "200kb",
+            "pattern": "^[0-9]{1,10}(b|kb|mb)$" 
+        },
+        "cron": {
+            "type": "object",
+            "default": {},
+            "properties": {
+                "enable": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "jitter": {
+                    "type": "integer",
+                    "default": 3,
+                    "minimum": 0
+                },
+                "interval": {
+                    "type": "string",
+                    "default": "*/15 * * * * *",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "time_zone": {
+                    "type": "string",
+                    "default": "Europe/Moscow",
+                    "minLength": 1,
+                    "maxLength": 64
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "interval",
+                "time_zone",
+                "enable",
+                "jitter"
+            ]
+        },
+        "commit_count": {
+            "type": "integer",
+            "default": 10,
+            "minimum": 1
+        },
+        "repository": {
+            "type": "string",
+            "default": "https://user:password@localhost/repository.git",
+            "minLength": 1,
+            "maxLength": 256
+        },
+        "branch": {
+            "type": "string",
+            "default": "main",
+            "minLength": 1,
+            "maxLength": 128
+        },
+        "target_folder": {
+            "type": "string",
+            "default": "/",
+            "minLength": 1,
+            "maxLength": 256
+        },
+        "crypt_key_path": {
+            "type": "string",
+            "default": "",
+            "minLength": 1,
+            "maxLength": 256
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "type",
+        "size",
+        "include_regexp",
+        "exclude_regexp",
+        "tmp",
+        "cron",
+        "commit_count",
+        "repository",
+        "branch",
+        "target_folder",
+        "crypt_key_path"
+    ]
+}

@@ -1,4 +1,5 @@
 import { ILoggerEventEmitterConfig } from "logger-event-emitter";
+import { IConnectorConfig } from "./connector/interfaces";
 
 export interface IApiServerConfig {
     enable: boolean
@@ -16,4 +17,5 @@ export interface IApiServerConfig {
 export interface IAppConfig {
     logger: ILoggerEventEmitterConfig
     api: IApiServerConfig
+    connector: IConnectorConfig[]
 }

@@ -6,3 +6,5 @@ dist
 Thumbs.db
 .vscode
 run.txt
+tmp
+_tmp

@@ -11,7 +11,48 @@
     port = 3001                 # порт
     backlog = 511               # очередь баклога
     prefix = "/api"             # префикс
-    connection_timeout = 0      # таймаут сервера в милисекундах
-    keep_alive_timeout = 5000   # таймаут keep-alive сервера в милисекундах
+    connection_timeout = 0      # таймаут сервера в миллисекундах
+    keep_alive_timeout = 5000   # таймаут keep-alive сервера в миллисекундах
     body_limit = "1mb"          # максимальный размер тела запроса (b, kb, mb)
-    trust_proxy = false         # доверие proxy закголовку
+    trust_proxy = false         # доверие proxy заголовку
+
+[[connector]]
+    enable = true                       # активация
+    description = ""                    # описание
+    destination_folder = ""             # папка назначения
+    recreate_destination_folder = true  # пересоздание папки назначения
+    [connector.source]                  # настройка источника
+        type = "git"                                                    # тип источника
+        include_regexp = [".*"]                                         # файлы будут включены в поиск        
+        exclude_regexp = ["\\.md$"]                                     # файлы будут исключены из поиска
+        tmp = "tmp"                                                     # временная папка
+        size = "200kb"                                                  # максимальный размер файла
+        commit_count = 10                                               # количество хранимых коммитов
+        repository = "https://user:password@localhost/repository.git"   # репозиторий
+        branch = "main"                                                 # ветка репозитория
+        [connector.source.cron]             # настройка обновления
+            enable = true                   # активация
+            jitter = 3                      # интервал дрожания
+            interval = "*/10 * * * * *"     # интервал
+            time_zone = "Europe/Moscow"     # временная зона
+
+[[connector]]
+    enable = true                       # активация
+    description = ""                    # описание
+    destination_folder = ""             # папка назначения
+    recreate_destination_folder = true  # пересоздание папки назначения
+    [connector.source]                  # настройка источника
+        type = "git-crypt"                                              # тип источника
+        include_regexp = [".*"]                                         # файлы будут включены в поиск        
+        exclude_regexp = ["\\.md$"]                                     # файлы будут исключены из поиска
+        tmp = "tmp"                                                     # временная папка
+        size = "200kb"                                                  # максимальный размер файла
+        commit_count = 10                                               # количество хранимых коммитов
+        repository = "https://user:password@localhost/repository.git"   # репозиторий
+        branch = "main"                                                 # ветка репозитория
+        crypt_key_path = ""                                             # путь к ключу репозитория
+        [connector.source.cron]             # настройка обновления
+            enable = true                   # активация
+            jitter = 3                      # интервал дрожания
+            interval = "*/10 * * * * *"     # интервал
+            time_zone = "Europe/Moscow"     # временная зона

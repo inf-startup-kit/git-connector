@@ -4,30 +4,30 @@
         "logger": {
             "type": "object",
             "default": {},
-            "env": "TEMPLATE_LOGGER",
+            "env": "GIT_CONNECTOR_LOGGER",
             "properties": {
                 "name": {
                     "type": "string",
                     "default": "",
-                    "env": "TEMPLATE_LOGGER_NAME",
+                    "env": "GIT_CONNECTOR_LOGGER_NAME",
                     "minLength": 0,
                     "maxLength": 32
                 },
                 "enable": {
                     "type": "boolean",
                     "default": true,
-                    "env": "TEMPLATE_LOGGER_ENABLE"
+                    "env": "GIT_CONNECTOR_LOGGER_ENABLE"
                 },
                 "level": {
                     "type": "string",
                     "default": "error",
-                    "env": "TEMPLATE_LOGGER_LEVEL",
+                    "env": "GIT_CONNECTOR_LOGGER_LEVEL",
                     "enum": ["fatal","info","error","warn","debug","trace"]
                 },
                 "timestamp": {
                     "type": "string",
                     "default": "none",
-                    "env": "TEMPLATE_LOGGER_TIMESTAMP",
+                    "env": "GIT_CONNECTOR_LOGGER_TIMESTAMP",
                     "enum": ["full","short","unix","none"]
                 }
             },
@@ -42,29 +42,29 @@
         "api": {
             "type": "object",
             "default": {},
-            "env": "TEMPLATE_API",
+            "env": "GIT_CONNECTOR_API",
             "properties": {
                 "enable": {
                     "type": "boolean",
                     "default": false,
-                    "env": "TEMPLATE_API_ENABLE"
+                    "env": "GIT_CONNECTOR_API_ENABLE"
                 },
                 "logging": {
                     "type": "boolean",
                     "default": false,
-                    "env": "TEMPLATE_API_LOGGING"
+                    "env": "GIT_CONNECTOR_API_LOGGING"
                 },
                 "hostname": {
                     "type": "string",
                     "default": "0.0.0.0",
                     "minLength": 1,
                     "maxLength": 64,
-                    "env": "TEMPLATE_API_HOSTNAME"
+                    "env": "GIT_CONNECTOR_API_HOSTNAME"
                 },
                 "port": {
                     "type": "integer",
                     "default": 3001,
-                    "env": "TEMPLATE_API_PORT",
+                    "env": "GIT_CONNECTOR_API_PORT",
                     "minimum": 1,
                     "maximum": 65535
                 },
@@ -73,37 +73,37 @@
                     "default": "/api",
                     "minLength": 0,
                     "maxLength": 32,
-                    "env": "TEMPLATE_API_PREFIX",
+                    "env": "GIT_CONNECTOR_API_PREFIX",
                     "pattern": "^(\/[a-zA-Z]{1}|)[-a-zA-Z0-9\/]{0,31}$"
                 },
                 "backlog": {
                     "type": "integer",
                     "default": 511,
-                    "env": "TEMPLATE_API_BACKLOG",
+                    "env": "GIT_CONNECTOR_API_BACKLOG",
                     "minimum": 1
                 },
                 "connection_timeout": {
                     "type": "integer",
                     "default": 0,
-                    "env": "TEMPLATE_API_CONNECTION_TIMEOUT",
+                    "env": "GIT_CONNECTOR_API_CONNECTION_TIMEOUT",
                     "minimum": 0
                 },
                 "keep_alive_timeout": {
                     "type": "integer",
                     "default": 5000,
-                    "env": "TEMPLATE_API_KEEP_ALIVE_TIMEOUT",
+                    "env": "GIT_CONNECTOR_API_KEEP_ALIVE_TIMEOUT",
                     "minimum": 1
                 },
                 "body_limit": {
                     "type": "string",
                     "default": "1mb",
-                    "env": "TEMPLATE_API_BODY_LIMIT",
+                    "env": "GIT_CONNECTOR_API_BODY_LIMIT",
                     "pattern": "^[0-9]{1,10}(b|kb|mb)$"
                 },
                 "trust_proxy": {
                     "type": "boolean",
                     "default": false,
-                    "env": "TEMPLATE_API_TRUST_PROXY"
+                    "env": "GIT_CONNECTOR_API_TRUST_PROXY"
                 }
             },
             "additionalProperties": false,
@@ -119,10 +119,17 @@
                 "trust_proxy",
                 "logging"
             ]
+        },
+        "connector": {
+            "type": "array",
+            "default": [],
+            "minItems": 0
         }
     },
+    "additionalProperties": false,
     "required": [
         "logger",
-        "api"
+        "api",
+        "connector"
     ]
 }
