@@ -100,7 +100,8 @@ CMD [ "app.js", "--config", "config.toml" ]
 
 COPY --from=builder /dist /git-connector
 
-RUN chown -R node:node /git-connector
+RUN chown -R node:node /git-connector && \
+    apk add --no-cache git
 
 USER node
 
