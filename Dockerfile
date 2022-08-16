@@ -93,18 +93,18 @@ ENV NODE_ENV=production
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH=$PATH:/home/node/.npm-global/bin
 
-WORKDIR /template
+WORKDIR /git-connector
 
 ENTRYPOINT [ "node" ]
 CMD [ "app.js", "--config", "config.toml" ]
 
-COPY --from=builder /dist /template
+COPY --from=builder /dist /git-connector
 
-RUN chown -R node:node /template
+RUN chown -R node:node /git-connector
 
 USER node
 
-RUN cd /template && \
+RUN cd /git-connector && \
     npm ci && \
     npm audit fix && \
     node app.js -v

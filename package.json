@@ -1,6 +1,6 @@
 {
     "name": "git-connector",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Git folder or file synchronization",
     "scripts": {
         "up": "ncu --configFilePath ./_common --configFileName ncu_up_config.json && rimraf ./package-lock.json && npm i && ncu --configFilePath ./_common --configFileName ncu_config.json",
