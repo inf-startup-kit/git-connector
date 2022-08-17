@@ -109,7 +109,7 @@
 
 ### Примеры применения
 
-проверить доступность сервера: `curl -i http://localhost:3001/api/healthcheck` или `curl -i http://localhost:3001/api/`  
+проверить доступность сервера: `curl -i http://localhost:3001/healthcheck` или `curl -i http://localhost:3001/`  
 
 ### API информации сервиса
 
