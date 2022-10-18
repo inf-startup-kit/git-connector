@@ -13,7 +13,7 @@ let connector_id = 1;
 const connectors: IConnector[] = [];
 
 for (const connector_config of config.connector) {
-    connectors.push(new Connector(`${connector_id}`, connector_config, logger.child(`${logger.name}:connector_${connector_id}`)));
+    connectors.push(new Connector(`${connector_id}`, connector_config, logger.child(`connector_${connector_id}`)));
     connector_id += 1;
 }
 
