@@ -118,7 +118,7 @@ export class ConnectorGitCryptSource extends EventEmitter implements IConnectorS
             this._job.start();
         }
         this._logger.debug(`Source type ${chalk.gray(this._config.type)} running`);
-        this._sync();
+        await this._sync();
     }
 
     async close (): Promise<void> {

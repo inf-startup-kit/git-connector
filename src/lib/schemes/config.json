@@ -120,6 +120,23 @@
                 "logging"
             ]
         },
+        "policy": {
+            "type": "object",
+            "default": {},
+            "env": "GIT_CONNECTOR_POLICY",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "watch",
+                    "env": "GIT_CONNECTOR_POLICY_TYPE",
+                    "enum": ["watch","only-start"]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type"
+            ]
+        },
         "connector": {
             "type": "array",
             "default": [],

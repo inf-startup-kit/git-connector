@@ -41,6 +41,9 @@
     level = "error"         # уровень (fatal, error, warn, info, debug, trace)
     timestamp = "none"      # вывод времени full, short, unix и none
 
+[policy]            # политика запуска
+    type = "watch"  # "watch" или "only-start"
+
 [api]
     enable = false              # активация API сервера
     logging = false             # логирование запросов (ключ logger.level = "debug" или ниже)
@@ -63,6 +66,7 @@
         include_regexp = [".*"]                                         # файлы будут включены в поиск        
         exclude_regexp = ["\\.md$"]                                     # файлы будут исключены из поиска
         tmp = "tmp"                                                     # временная папка
+        target_folder = "/"                                             # целевая папка
         size = "200kb"                                                  # максимальный размер файла
         commit_count = 10                                               # количество хранимых коммитов
         repository = "https://user:password@localhost/repository.git"   # репозиторий
@@ -83,6 +87,7 @@
         include_regexp = [".*"]                                         # файлы будут включены в поиск        
         exclude_regexp = ["\\.md$"]                                     # файлы будут исключены из поиска
         tmp = "tmp"                                                     # временная папка
+        target_folder = "/"                                             # целевая папка
         size = "200kb"                                                  # максимальный размер файла
         commit_count = 10                                               # количество хранимых коммитов
         repository = "https://user:password@localhost/repository.git"   # репозиторий

@@ -126,11 +126,19 @@ for (let connector of config.connector) {
         process.exit(1);
     }
 
+    if (config.policy.type === "only-start") {
+        connector.source.cron.enable = false;
+    }
+
     config.connector[i] = connector;
     
     ++i;
 }
 
 config.api.prefix = `/${config.api.prefix.replace(/(^\/|\/$)/g,"")}`;
+
+if (config.policy.type === "only-start") {
+    config.api.enable = false;
+}
 
 export default config;

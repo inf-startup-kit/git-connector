@@ -19,54 +19,74 @@ for (const connector_config of config.connector) {
 
 const bootstrap = async () => {
 
-    try {
+    if (config.policy.type === "only-start") {
 
-        const api_server_logger = logger.child("api-server");
-        const api_server = buildApiServer(config.api, api_server_logger);
-        
+        try {
 
-        if (config.api.enable === true) {
-
-            api_server.listen({
-                port: config.api.port,
-                host: config.api.hostname,
-                backlog: config.api.backlog
-            }, (error: Error, address: string) => {
-                if (error !== null) {
-                    api_server_logger.fatal(`Error start server. Error: ${chalk.red(error)}`);
-                    process.exit(1);
-                }
-                api_server_logger.info(`Server listening on ${chalk.cyan(address)}`);
-            });
-        }
-
-        for (const connector of connectors) {
-            connector.run();
-        }
-
-        const stop_app = async () => {
-            api_server.close();
             for (const connector of connectors) {
+                await connector.run();
                 await connector.close();
             }
-            setImmediate( () => {
-                process.exit();
+
+        } catch (error) {
+            logger.fatal(`Error application start.\n${error.stack}`);
+            process.exit(1);
+        }
+
+    }
+
+    if (config.policy.type === "watch") {
+
+        try {
+
+            const api_server_logger = logger.child("api-server");
+            const api_server = buildApiServer(config.api, api_server_logger);
+            
+    
+            if (config.api.enable === true) {
+    
+                api_server.listen({
+                    port: config.api.port,
+                    host: config.api.hostname,
+                    backlog: config.api.backlog
+                }, (error: Error, address: string) => {
+                    if (error !== null) {
+                        api_server_logger.fatal(`Error start server. Error: ${chalk.red(error)}`);
+                        process.exit(1);
+                    }
+                    api_server_logger.info(`Server listening on ${chalk.cyan(address)}`);
+                });
+            }
+    
+            for (const connector of connectors) {
+                connector.run();
+            }
+    
+            const stop_app = async () => {
+                api_server.close();
+                for (const connector of connectors) {
+                    await connector.close();
+                }
+                setImmediate( () => {
+                    process.exit();
+                });
+            };
+    
+            process.on("SIGTERM", () => {
+                logger.info(`Signal ${chalk.cyan("SIGTERM")} received`);
+                stop_app();
             });
-        };
+    
+            process.on("SIGINT", () => {
+                logger.info(`Signal ${chalk.cyan("SIGINT")} received`);
+                stop_app();
+            });
+    
+        } catch (error) {
+            logger.fatal(`Error application start.\n${error.stack}`);
+            process.exit(1);
+        }
 
-        process.on("SIGTERM", () => {
-            logger.info(`Signal ${chalk.cyan("SIGTERM")} received`);
-            stop_app();
-        });
-
-        process.on("SIGINT", () => {
-            logger.info(`Signal ${chalk.cyan("SIGINT")} received`);
-            stop_app();
-        });
-
-    } catch (error) {
-        logger.fatal(`Error application start.\n${error.stack}`);
-        process.exit(1);
     }
 
 };

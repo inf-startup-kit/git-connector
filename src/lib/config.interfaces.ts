@@ -1,6 +1,10 @@
 import { ILoggerEventEmitterConfig } from "logger-event-emitter";
 import { IConnectorConfig } from "./connector/interfaces";
 
+export interface IPolicy {
+    type: "watch" | "only-start"
+}
+
 export interface IApiServerConfig {
     enable: boolean
     logging: boolean
@@ -17,5 +21,6 @@ export interface IApiServerConfig {
 export interface IAppConfig {
     logger: ILoggerEventEmitterConfig
     api: IApiServerConfig
+    policy: IPolicy
     connector: IConnectorConfig[]
 }

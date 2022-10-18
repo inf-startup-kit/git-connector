@@ -45,11 +45,11 @@ export class ConnectorSource extends EventEmitter implements IConnectorSource {
     }
 
     async run (): Promise<void> {
-        return this._source.run();
+        await this._source.run();
     }
 
     async close (): Promise<void> {
-        return this._source.close();
+        await this._source.close();
     }
 
 }

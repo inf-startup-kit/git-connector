@@ -22,6 +22,12 @@ export type TConnectorSourceConfigType = "git" | "git-crypt"
 
 export interface IConnectorSourceConfig {
     type: TConnectorSourceConfigType
+    cron: {
+        enable: boolean
+        jitter: number
+        interval: string,
+        time_zone: string
+    }
 }
 
 export interface IConnectorGitSourceConfig extends IConnectorSourceConfig {
@@ -29,12 +35,6 @@ export interface IConnectorGitSourceConfig extends IConnectorSourceConfig {
     exclude_regexp: string
     size: string
     tmp: string
-    cron: {
-        enable: boolean
-        jitter: number
-        interval: string,
-        time_zone: string
-    }
     commit_count: number
     repository: string
     branch: string
